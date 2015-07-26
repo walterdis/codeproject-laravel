@@ -61,8 +61,8 @@ class ClientService
     public function update($data, $id)
     {
         try {
-            $this->validator->setRuleEmailUniqueIgnoreId($id);
-            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $this->validator->with($data)->setId($id)
+                ->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
             return $this->repository->update($data, $id);
         } catch(ValidatorException $e) {

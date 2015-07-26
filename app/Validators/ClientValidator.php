@@ -33,13 +33,4 @@ class ClientValidator extends LaravelValidator
             'address' => 'sometimes|required',
         ]
     ];
-
-    /**
-     * @param null $clientId
-     */
-    public function setRuleEmailUniqueIgnoreId($clientId = null)
-    {
-        $this->rules[ValidatorInterface::RULE_UPDATE]['email'] = 'sometimes|required|email|unique:clients,email,'.$clientId;
-    }
-
 } 
