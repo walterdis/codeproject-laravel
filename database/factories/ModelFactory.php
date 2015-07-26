@@ -20,7 +20,7 @@ $factory->define(CodeProject\User::class, function ($faker) {
     ];
 });
 
-$factory->define(CodeProject\Model\Client::class, function ($faker) {
+$factory->define(CodeProject\Entities\Client::class, function ($faker) {
     /** @var $faker Faker\Generator */
     return [
         'name' => $faker->name,
