@@ -4,6 +4,7 @@ namespace CodeProject\Http\Controllers;
 
 use CodeProject\Repositories\Contracts\ProjectRepository;
 use CodeProject\Services\ProjectService;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {

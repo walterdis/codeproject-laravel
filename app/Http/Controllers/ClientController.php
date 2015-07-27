@@ -4,6 +4,7 @@ namespace CodeProject\Http\Controllers;
 
 use CodeProject\Repositories\Contracts\ClientRepository;
 use CodeProject\Services\ClientService;
+use Illuminate\Http\Request;
 
 
 class ClientController extends Controller
