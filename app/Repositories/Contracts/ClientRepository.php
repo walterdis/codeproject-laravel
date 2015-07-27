@@ -6,14 +6,13 @@
  * Time: 17:42
  */
 
-namespace CodeProject\Repositories;
+namespace CodeProject\Repositories\Contracts;
 
 
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 interface ClientRepository  extends RepositoryInterface
 {
-
 
 
 } 

@@ -9,7 +9,7 @@
 namespace CodeProject\Services;
 
 
-use CodeProject\Repositories\ClientRepository;
+use CodeProject\Repositories\Contracts\ClientRepository;
 use CodeProject\Validators\ClientValidator;
 use Illuminate\Contracts\Validation\ValidationException;
 use Prettus\Validator\Contracts\ValidatorInterface;
@@ -18,6 +18,9 @@ use Prettus\Validator\Exceptions\ValidatorException;
 class ClientService
 {
 
+    /**
+     * @var ClientRepository
+     */
     protected $repository;
 
     /**

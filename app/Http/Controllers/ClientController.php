@@ -2,23 +2,12 @@
 
 namespace CodeProject\Http\Controllers;
 
-use CodeProject\Repositories\ClientRepository;
+use CodeProject\Repositories\Contracts\ClientRepository;
 use CodeProject\Services\ClientService;
-use Illuminate\Http\Request;
 
 
 class ClientController extends Controller
 {
-
-    /**
-     * @var ClientRepository
-     */
-    private $repository;
-
-    /**
-     * @var ClientService
-     */
-    private $service;
 
     /**
      * @param ClientRepository $repository
@@ -37,7 +26,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return $this->repository->all();
+        return $this->repository->with('projects')->all();
     }
 
     /**
