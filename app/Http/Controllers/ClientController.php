@@ -4,6 +4,7 @@ namespace CodeProject\Http\Controllers;
 
 use CodeProject\Repositories\Contracts\ClientRepository;
 use CodeProject\Services\ClientService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 
@@ -38,7 +39,14 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->create($request->all());
+        try {
+            return $this->service->create($request->all());
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 
     /**
@@ -49,7 +57,14 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        return $this->repository->find($id);
+        try {
+            return $this->repository->find($id);
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 
     /**
@@ -61,7 +76,14 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($request->all(), $id);
+        try {
+            return $this->service->update($request->all(), $id);
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 
     /**
@@ -72,6 +94,16 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->delete($id);
+        try {
+            if($this->repository->delete($id)) {
+                return ['success', 'message' => 'Registro excluído'];
+            }
+            return ['error', 'message' => 'Erro desconhecido ao tentar excluir o registro'];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 }

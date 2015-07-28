@@ -4,6 +4,7 @@ namespace CodeProject\Http\Controllers;
 
 use CodeProject\Repositories\Contracts\ProjectRepository;
 use CodeProject\Services\ProjectService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -49,7 +50,16 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        return $this->repository->with('client')->with('owner')->find($id);
+        try {
+            return $this->repository->with('client')->with('owner')->find($id);
+        } catch( ModelNotFoundException $e ) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
+
+
     }
 
     /**
@@ -61,7 +71,14 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($request->all(), $id);
+        try {
+            return $this->service->update($request->all(), $id);
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 
     /**
@@ -72,7 +89,17 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->delete($id);
+        try {
+            if($this->repository->delete($id)) {
+                return ['success', 'message' => 'Registro excluído'];
+            }
+            return ['error', 'message' => 'Erro desconhecido ao tentar excluir o registro'];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        }
     }
 
 }
