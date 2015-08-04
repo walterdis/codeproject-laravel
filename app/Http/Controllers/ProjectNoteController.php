@@ -2,20 +2,20 @@
 
 namespace CodeProject\Http\Controllers;
 
-use CodeProject\Repositories\Contracts\ProjectRepository;
-use CodeProject\Services\ProjectService;
+use CodeProject\Repositories\Contracts\ProjectNoteRepository;
+use CodeProject\Services\ProjectNoteService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class ProjectController extends Controller
+class ProjectNoteController extends Controller
 {
 
 
     /**
-     * @param ProjectRepository $repository
-     * @param ProjectService $service
+     * @param ProjectNoteRepository $repository
+     * @param ProjectNoteService $service
      */
-    public function __construct(ProjectRepository $repository, ProjectService $service)
+    public function __construct(ProjectNoteRepository $repository, ProjectNoteService $service)
     {
         $this->repository = $repository;
         $this->service = $service;
@@ -28,7 +28,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $this->repository->with('client')->with('owner')->all();
+        return $this->repository->with('project')->all();
     }
 
     /**
@@ -51,42 +51,15 @@ class ProjectController extends Controller
     public function show($id)
     {
         try {
-            return $this->repository->with('client')->with('owner')->find($id);
+            return $this->repository->with('project')->find($id);
         } catch( ModelNotFoundException $e ) {
             return [
                 'error' => true,
                 'message' => 'Não foi possível encontrar o registro'
             ];
         }
-    }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function members($id)
-    {
-        return $this->repository->findMembers($id);
-    }
 
-    /**
-     * @param Request $request
-     * @param $id
-     * @return array
-     */
-    public function addMember(Request $request, $id)
-    {
-        return $this->service->addMember($request->all(), $id);
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return array
-     */
-    public function removeMember(Request $request, $id)
-    {
-        return $this->service->removeMember($request->all(), $id);
     }
 
     /**

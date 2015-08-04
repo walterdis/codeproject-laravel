@@ -96,7 +96,7 @@ class ClientController extends Controller
     {
         try {
             if($this->repository->delete($id)) {
-                return ['success', 'message' => 'Registro excluído'];
+                return ['success' => true, 'message' => 'Registro excluído'];
             }
             return ['error', 'message' => 'Erro desconhecido ao tentar excluir o registro'];
         } catch (ModelNotFoundException $e) {

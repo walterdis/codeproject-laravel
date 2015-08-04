@@ -2,6 +2,7 @@
 
 namespace CodeProject;
 
+use CodeProject\Entities\Project;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -40,6 +41,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function projects()
     {
         $this->hasMany('CodeProject\Entities\Project');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function members()
+    {
+        return $this->belongsToMany(Project::class, 'project_members')->withTimestamps();
     }
 
     /**

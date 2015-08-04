@@ -12,6 +12,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 
 interface ProjectRepository  extends RepositoryInterface
 {
-
-
+    public function findMembers($project_id);
+    public function memberExists($member_id);
+    public function addMember($project_id, $member_id);
+    public function removeMember($project_id, $member_id);
+    public function isMember($project_id, $member_id);
 } 

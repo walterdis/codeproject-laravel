@@ -10,7 +10,9 @@ namespace CodeProject\Services;
 
 
 use CodeProject\Repositories\Contracts\ProjectRepository;
+use CodeProject\User;
 use CodeProject\Validators\ProjectValidator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -71,6 +73,45 @@ class ProjectService
                 'error' => true,
                 'message' => $e->getMessageBag()
             ];
+        }
+    }
+
+
+    /**
+     * @param $request
+     * @param $id
+     * @return json
+     */
+    public function addMember($request, $id)
+    {
+        $user_id = $request['user_id'];
+
+        if(!$this->repository->memberExists($user_id)) {
+            return ['error' => true, 'message' => 'Não foi possível encontrar o membro especificado.'];
+        }
+
+        try {
+            $this->repository->addMember($id, $user_id);
+            return ['error' => false, 'message' => 'Membro adicionado ao projeto'];
+        } catch (ModelNotFoundException $e) {
+            return ['error' => true, 'message' => 'Projeto inválido.'];
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $id
+     * @return json
+     */
+    public function removeMember($request, $id)
+    {
+        $user_id = $request['user_id'];
+
+        try {
+            $this->repository->removeMember($id, $user_id);
+            return ['error' => false, 'message' => 'Membro removido.'];
+        } catch (ModelNotFoundException $e) {
+            return ['error' => true, 'message' => 'Projeto inválido.'];
         }
     }
 } 

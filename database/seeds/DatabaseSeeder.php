@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         factory(CodeProject\Entities\Client::class, 10)->create();
 
         $this->call('ProjectTableSeeder');
+        $this->call('ProjectNoteTableSeeder');
+        $this->call('ProjectTaskTableSeeder');
 
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -61,7 +63,29 @@ class ProjectTableSeeder extends Seeder
             ]);
         }
 
-
+        $projects = \CodeProject\Entities\Project::all();
+        foreach($projects as $project) {
+            $project->members()->detach();
+            $project->members()->attach([1, mt_rand(1, 20)]);
+        }
     }
 }
 
+class ProjectNoteTableSeeder extends Seeder
+{
+    public function run()
+    {
+        \CodeProject\Entities\ProjectNote::truncate();
+        factory(CodeProject\Entities\ProjectNote::class, 50)->create();
+    }
+}
+
+
+class ProjectTaskTableSeeder extends Seeder
+{
+    public function run()
+    {
+        \CodeProject\Entities\ProjectTask::truncate();
+        factory(CodeProject\Entities\ProjectTask::class, 20)->create();
+    }
+}

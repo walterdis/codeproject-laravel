@@ -2,6 +2,7 @@
 
 namespace CodeProject\Entities;
 
+use CodeProject\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -22,5 +23,29 @@ class Project extends Model
     public function owner()
     {
         return $this->belongsTo('CodeProject\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notes()
+    {
+        return $this->hasMany(ProjectNote::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(ProjectTask::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_members')->withTimestamps();
     }
 }

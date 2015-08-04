@@ -49,3 +49,25 @@ $factory->define(CodeProject\Entities\Project::class, function ($faker) {
     ];
 });
 
+$factory->define(CodeProject\Entities\ProjectNote::class, function ($faker) {
+    /** @var $faker Faker\Generator */
+
+    return [
+        'project_id' => mt_rand(1,20),
+        'title' => 'Note '.$faker->word,
+        'note' => $faker->paragraph(),
+    ];
+});
+
+$factory->define(CodeProject\Entities\ProjectTask::class, function ($faker) {
+    /** @var $faker Faker\Generator */
+
+    return [
+        'project_id' => mt_rand(1,20),
+        'name' => 'Task: '.$faker->paragraph(mt_rand(1, 2)),
+        'start_date' => $faker->dateTimeBetween('-5 days', '+5 days'),
+        'due_date' => $faker->dateTimeBetween('+5 days', '+10 days'),
+        'status' => mt_rand(1, 4)
+    ];
+});
+
