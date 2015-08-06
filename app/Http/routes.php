@@ -11,6 +11,11 @@
 |
 */
 
+Event::listen('illuminate.query', function($query)
+{
+    #var_dump($query);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -36,6 +41,7 @@ Route::delete('project/{id}/note/{note_id}', 'ProjectNoteController@destroy');
 Route::post('project/{id}/members', 'ProjectController@addMember');
 Route::delete('project/{id}/members/{member_id}', 'ProjectController@removeMember');
 Route::get('project/{id}/members', 'ProjectController@members');
+Route::get('project/{id}/ismember/{member_id}', 'ProjectController@isMember');
 
 
 Route::get('project/{id}/tasks', 'ProjectTaskController@index');

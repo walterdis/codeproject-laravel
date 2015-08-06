@@ -108,6 +108,19 @@ class ProjectController extends Controller
         return $this->service->addMember($request->all(), $id);
     }
 
+
+    /**
+     * @param $project_id
+     * @param $user_id
+     * @return array
+     */
+    public function isMember($project_id, $user_id)
+    {
+        $isMember = $this->repository->isMember($project_id, $user_id);
+
+        return ['is_member' => $isMember];
+    }
+
     /**
      * @param $id
      * @param $user_id

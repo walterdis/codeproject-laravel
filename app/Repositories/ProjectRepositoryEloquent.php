@@ -57,7 +57,9 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
      */
     public function isMember($project_id, $member_id)
     {
-        return (String) (boolean) Project::with('members')->find($project_id)->count();
+        return (boolean) Project::whereHas('members', function($query) use ($member_id, $project_id) {
+            $query->where('user_id', '=', $member_id)->where('project_id', '=', $project_id);
+        })->count();
     }
 
     /**
