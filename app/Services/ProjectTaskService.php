@@ -8,28 +8,30 @@
 
 namespace CodeProject\Services;
 
-use CodeProject\Repositories\Contracts\ProjectNoteRepository;
-use CodeProject\Validators\ProjectNoteValidator;
+use CodeProject\Repositories\Contracts\ProjectTaskRepository;
+use CodeProject\Validators\ProjectTaskValidator;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 
-class ProjectNoteService
+class ProjectTaskService
 {
+
     /**
-     * @var ProjectNoteRepository
+     * @var TaskRepository
      */
     protected $repository;
 
     /**
-     * @var ProjectNoteValidator
+     * @var TaskValidator
      */
     private $validator;
 
+
     /**
-     * @param ProjectNoteRepository $repository
-     * @param ProjectNoteValidator $validator
+     * @param ProjectTaskRepository $repository
+     * @param ProjectTaskValidator $validator
      */
-    public function __construct(ProjectNoteRepository $repository, ProjectNoteValidator $validator)
+    public function __construct(ProjectTaskRepository $repository, ProjectTaskValidator $validator)
     {
         $this->repository = $repository;
         $this->validator = $validator;
@@ -43,7 +45,6 @@ class ProjectNoteService
     public function create(array $data, $project_id)
     {
         $data['project_id'] = $project_id;
-
         try {
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
@@ -59,18 +60,17 @@ class ProjectNoteService
     /**
      * @param $data
      * @param $id
-     * @param $noteId
      * @return mixed
      */
-    public function update($data, $id, $noteId)
+    public function update($data, $id, $task_id)
     {
         $data['project_id'] = $id;
 
         try {
-            $this->validator->with($data)->setId($noteId)
+            $this->validator->with($data)->setId($task_id)
                 ->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            return $this->repository->update($data, $noteId);
+            return $this->repository->update($data, $task_id);
         } catch(ValidatorException $e) {
             return [
                 'error' => true,

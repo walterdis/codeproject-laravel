@@ -8,6 +8,7 @@
 
 namespace CodeProject\Repositories;
 
+use CodeProject\Entities\ProjectTask;
 use CodeProject\Repositories\Contracts\ProjectRepository;
 use CodeProject\Entities\Project;
 use CodeProject\User;
@@ -30,12 +31,21 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
         return Project::with('members')->find($project_id);
     }
 
+    /**
+     * @param $project_id
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function findTasks($project_id)
+    {
+        return Project::with('tasks')->find($project_id);
+    }
 
     /**
      * @param $member_id
+     * @param $project_id
      * @return Boolean
      */
-    public function memberExists($member_id)
+    public function memberExists($member_id, $project_id)
     {
         return User::where('id', '=', $member_id)->exists();
     }

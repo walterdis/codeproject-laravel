@@ -76,7 +76,6 @@ class ProjectService
         }
     }
 
-
     /**
      * @param $request
      * @param $id
@@ -86,7 +85,7 @@ class ProjectService
     {
         $user_id = $request['user_id'];
 
-        if(!$this->repository->memberExists($user_id)) {
+        if(!$this->repository->memberExists($user_id, $id)) {
             return ['error' => true, 'message' => 'Não foi possível encontrar o membro especificado.'];
         }
 
@@ -99,14 +98,12 @@ class ProjectService
     }
 
     /**
-     * @param $request
      * @param $id
+     * @param $user_id
      * @return json
      */
-    public function removeMember($request, $id)
+    public function removeMember($id, $user_id)
     {
-        $user_id = $request['user_id'];
-
         try {
             $this->repository->removeMember($id, $user_id);
             return ['error' => false, 'message' => 'Membro removido.'];

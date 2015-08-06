@@ -64,6 +64,35 @@ class ProjectController extends Controller
      * @param $id
      * @return mixed
      */
+    public function tasks($id)
+    {
+        return $this->repository->findTasks($id);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     */
+    public function addTask(Request $request, $id)
+    {
+        return $this->service->addTask($request->all(), $id);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     */
+    public function removeTask(Request $request, $id)
+    {
+        return $this->service->removeTask($request->all(), $id);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function members($id)
     {
         return $this->repository->findMembers($id);
@@ -80,13 +109,13 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param $id
+     * @param $user_id
      * @return array
      */
-    public function removeMember(Request $request, $id)
+    public function removeMember($id, $user_id)
     {
-        return $this->service->removeMember($request->all(), $id);
+        return $this->service->removeMember($id, $user_id);
     }
 
     /**

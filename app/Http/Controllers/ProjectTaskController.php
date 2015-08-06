@@ -2,18 +2,18 @@
 
 namespace CodeProject\Http\Controllers;
 
-use CodeProject\Repositories\Contracts\ProjectNoteRepository;
-use CodeProject\Services\ProjectNoteService;
+use CodeProject\Repositories\Contracts\ProjectTaskRepository;
+use CodeProject\Services\ProjectTaskService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class ProjectNoteController extends Controller
+class ProjectTaskController extends Controller
 {
     /**
-     * @param ProjectNoteRepository $repository
-     * @param ProjectNoteService $service
+     * @param ProjectTaskRepository $repository
+     * @param ProjectTaskService $service
      */
-    public function __construct(ProjectNoteRepository $repository, ProjectNoteService $service)
+    public function __construct(ProjectTaskRepository $repository, ProjectTaskService $service)
     {
         $this->repository = $repository;
         $this->service = $service;
@@ -46,13 +46,13 @@ class ProjectNoteController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @param $noteId
+     * @param $taskId
      * @return Response
      */
-    public function show($id, $noteId)
+    public function show($id, $taskId)
     {
         try {
-            return $this->repository->findWhere(['project_id' => $id, 'id' => $noteId]);
+            return $this->repository->findWhere(['project_id' => $id, 'id' => $taskId]);
         } catch( ModelNotFoundException $e ) {
             return [
                 'error' => true,
@@ -66,13 +66,13 @@ class ProjectNoteController extends Controller
      *
      * @param  Request $request
      * @param  int $id
-     * @param $noteId
+     * @param $taskId
      * @return Response
      */
-    public function update(Request $request, $id, $noteId)
+    public function update(Request $request, $id, $taskId)
     {
         try {
-            return $this->service->update($request->all(), $id, $noteId);
+            return $this->service->update($request->all(), $id, $taskId);
         } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
@@ -85,13 +85,13 @@ class ProjectNoteController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @param $noteId
+     * @param $taskId
      * @return Response
      */
-    public function destroy($id, $noteId)
+    public function destroy($id, $taskId)
     {
         try {
-            if($this->repository->delete($noteId)) {
+            if($this->repository->delete($taskId)) {
                 return ['success', 'message' => 'Registro excluído'];
             }
             return ['error', 'message' => 'Erro desconhecido ao tentar excluir o registro'];
