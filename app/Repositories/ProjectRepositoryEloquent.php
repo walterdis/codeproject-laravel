@@ -8,11 +8,11 @@
 
 namespace CodeProject\Repositories;
 
-use CodeProject\Entities\ProjectTask;
 use CodeProject\Repositories\Contracts\ProjectRepository;
 use CodeProject\Entities\Project;
 use CodeProject\User;
 use Prettus\Repository\Eloquent\BaseRepository;
+use CodeProject\Fractal\Presenters\ProjectPresenter;
 
 class ProjectRepositoryEloquent extends BaseRepository implements ProjectRepository
 {
@@ -85,5 +85,26 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
         $project = Project::findOrFail($project_id);
 
         return $project->members()->detach($member_id);
+    }
+
+    /**
+     * @param $project_id
+     * @param $user_id
+     * @return bool
+     */
+    public function isOwner($project_id, $user_id)
+    {
+        $isOwner = Project::where(['id' => $project_id, 'owner_id' => $user_id])->count();
+
+        if($isOwner) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function presenter()
+    {
+        return ProjectPresenter::class;
     }
 } 

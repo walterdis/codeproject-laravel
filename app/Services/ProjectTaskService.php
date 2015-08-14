@@ -60,6 +60,7 @@ class ProjectTaskService
     /**
      * @param $data
      * @param $id
+     * @param $task_id
      * @return mixed
      */
     public function update($data, $id, $task_id)
@@ -67,8 +68,14 @@ class ProjectTaskService
         $data['project_id'] = $id;
 
         try {
-            $this->validator->with($data)->setId($task_id)
-                ->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $this->validator->with($data)->setId($task_id)->passesOrFail(ValidatorInterface::RULE_UPDATE);
+
+            if(!$this->repository->findWhere(['id' => $task_id, 'project_id' => $id])->first()) {
+                return [
+                    'error' => true,
+                    'message' => 'Task not found'
+                ];
+            }
 
             return $this->repository->update($data, $task_id);
         } catch(ValidatorException $e) {

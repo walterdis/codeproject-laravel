@@ -27,6 +27,10 @@ class ProjectNoteController extends Controller
      */
     public function index($project_id)
     {
+        if(!$this->checkProjectPermissions($project_id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->repository->findWhere(['project_id' => $project_id]);
     }
 
@@ -39,6 +43,10 @@ class ProjectNoteController extends Controller
      */
     public function store(Request $request, $project_id)
     {
+        if(!$this->checkProjectPermissions($project_id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->service->create($request->all(), $project_id);
     }
 
@@ -51,6 +59,10 @@ class ProjectNoteController extends Controller
      */
     public function show($id, $noteId)
     {
+        if(!$this->checkProjectPermissions($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             return $this->repository->findWhere(['project_id' => $id, 'id' => $noteId]);
         } catch( ModelNotFoundException $e ) {
@@ -71,6 +83,10 @@ class ProjectNoteController extends Controller
      */
     public function update(Request $request, $id, $noteId)
     {
+        if(!$this->checkProjectPermissions($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             return $this->service->update($request->all(), $id, $noteId);
         } catch (ModelNotFoundException $e) {
@@ -90,6 +106,10 @@ class ProjectNoteController extends Controller
      */
     public function destroy($id, $noteId)
     {
+        if(!$this->checkProjectOwner($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             if($this->repository->delete($noteId)) {
                 return ['success', 'message' => 'Registro excluído'];

@@ -17,4 +17,5 @@ interface ProjectRepository  extends RepositoryInterface
     public function addMember($project_id, $member_id);
     public function removeMember($project_id, $member_id);
     public function isMember($project_id, $member_id);
+    public function isOwner($project_id, $user_id);
 } 

@@ -8,6 +8,7 @@
 
 namespace CodeProject\Repositories;
 
+use CodeProject\Fractal\Presenters\ClientPresenter;
 use CodeProject\Repositories\Contracts\ClientRepository;
 use CodeProject\Entities\Client;
 use Prettus\Repository\Eloquent\BaseRepository;
@@ -20,4 +21,12 @@ class ClientRepositoryEloquent extends BaseRepository implements ClientRepositor
         return Client::class;
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function presenter()
+    {
+        return ClientPresenter::class;
+    }
 } 

@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-
-
     /**
      * @param ProjectRepository $repository
      * @param ProjectService $service
@@ -28,7 +26,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $this->repository->with('client')->with('owner')->all();
+        return $this->repository->with('client')->findWhere(['owner_id' => $this->getAuthorizerId()]);
     }
 
     /**
@@ -50,6 +48,10 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        if(!$this->checkProjectPermissions($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             return $this->repository->with('client')->with('owner')->find($id);
         } catch( ModelNotFoundException $e ) {
@@ -64,37 +66,12 @@ class ProjectController extends Controller
      * @param $id
      * @return mixed
      */
-    public function tasks($id)
-    {
-        return $this->repository->findTasks($id);
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return array
-     */
-    public function addTask(Request $request, $id)
-    {
-        return $this->service->addTask($request->all(), $id);
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return array
-     */
-    public function removeTask(Request $request, $id)
-    {
-        return $this->service->removeTask($request->all(), $id);
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
     public function members($id)
     {
+        if(!$this->checkProjectPermissions($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->repository->findMembers($id);
     }
 
@@ -105,9 +82,12 @@ class ProjectController extends Controller
      */
     public function addMember(Request $request, $id)
     {
+        if(!$this->checkProjectOwner($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->service->addMember($request->all(), $id);
     }
-
 
     /**
      * @param $project_id
@@ -128,6 +108,10 @@ class ProjectController extends Controller
      */
     public function removeMember($id, $user_id)
     {
+        if(!$this->checkProjectOwner($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->service->removeMember($id, $user_id);
     }
 
@@ -140,6 +124,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(!$this->checkProjectOwner($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             return $this->service->update($request->all(), $id);
         } catch (ModelNotFoundException $e) {
@@ -158,6 +146,10 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+        if(!$this->checkProjectOwner($id)) {
+            return ['error' => 'Access forbidden'];
+        }
+
         try {
             if($this->repository->delete($id)) {
                 return ['success', 'message' => 'Registro excluído'];

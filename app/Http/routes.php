@@ -13,43 +13,42 @@
 
 Event::listen('illuminate.query', function($query)
 {
-    #var_dump($query);
+    //var_dump($query);
 });
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('oauth/access_token', function() {
+Route::get('oauth/access_token', function() {
     return Response::json(Authorizer::issueAccessToken());
 });
 
-Route::get('client', 'ClientController@index');
-Route::post('client', 'ClientController@store');
-Route::get('client/{id}', 'ClientController@show');
-Route::delete('client/{id}', 'ClientController@destroy');
-Route::put('client/{id}', 'ClientController@update');
 
 
-Route::get('project/{id}/note', 'ProjectNoteController@index');
-Route::post('project/{id}/note', 'ProjectNoteController@store');
-Route::get('project/{id}/note/{note_id}', 'ProjectNoteController@show');
-Route::put('project/{id}/note/{note_id}', 'ProjectNoteController@update');
-Route::delete('project/{id}/note/{note_id}', 'ProjectNoteController@destroy');
+Route::group(['middleware' => 'oauth'], function() {
 
+    #$allowOwner = ['store', 'destroy'];
+    #$allowMember = ['show', 'update'];
 
-Route::post('project/{id}/members', 'ProjectController@addMember');
-Route::delete('project/{id}/members/{member_id}', 'ProjectController@removeMember');
-Route::get('project/{id}/members', 'ProjectController@members');
-Route::get('project/{id}/ismember/{member_id}', 'ProjectController@isMember');
+    Route::resource('client', 'ClientController', ['except' => ['create', 'edit']]);
+    Route::resource('project', 'ProjectController', ['except' => ['create', 'edit']]);
 
+    Route::post('project/{project}/file', 'ProjectFileController@store');
+    Route::put('project/{project}/file/{file}', 'ProjectFileController@update');
+    Route::delete('project/{project}/file/{file}', 'ProjectFileController@destroy');
 
-Route::get('project/{id}/tasks', 'ProjectTaskController@index');
-Route::post('project/{id}/tasks', 'ProjectTaskController@store');
-Route::get('project/{id}/tasks/{task_id}', 'ProjectTaskController@show');
-Route::put('project/{id}/tasks/{task_id}', 'ProjectTaskController@update');
-Route::delete('project/{id}/tasks/{task_id}', 'ProjectTaskController@destroy');
+    Route::post('project/{id}/members', 'ProjectController@addMember');
+    Route::delete('project/{id}/members/{member_id}', 'ProjectController@removeMember');
+    Route::get('project/{id}/members', 'ProjectController@members');
+    Route::get('project/{id}/ismember/{member_id}', 'ProjectController@isMember');
 
+    Route::resource('project.tasks', 'ProjectTaskController', ['except' => ['create', 'edit']]);
+    Route::resource('project.note', 'ProjectNoteController', ['except' => ['create', 'edit']]);
 
+    #Route::group(['middleware' => 'check-project-member'], function() use ($allowMember) {
+        #Route::resource('project', 'ProjectController', ['only' => $allowMember]);
+    #});
 
-Route::resource('project', 'ProjectController');
+});
+

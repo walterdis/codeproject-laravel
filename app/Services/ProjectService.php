@@ -10,11 +10,15 @@ namespace CodeProject\Services;
 
 
 use CodeProject\Repositories\Contracts\ProjectRepository;
-use CodeProject\User;
 use CodeProject\Validators\ProjectValidator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use League\Flysystem\FileNotFoundException;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
+
+Use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
+
 
 class ProjectService
 {
@@ -27,15 +31,27 @@ class ProjectService
      * @var ProjectValidator
      */
     private $validator;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var Storage
+     */
+    private $storage;
 
     /**
      * @param ProjectRepository $repository
      * @param ProjectValidator $validator
+     * @param Filesystem $filesystem
+     * @param Storage $storage
      */
-    public function __construct(ProjectRepository $repository, ProjectValidator $validator)
+    public function __construct(ProjectRepository $repository, ProjectValidator $validator, Filesystem $filesystem, Storage $storage)
     {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->filesystem = $filesystem;
+        $this->storage = $storage;
     }
 
     /**
@@ -110,5 +126,61 @@ class ProjectService
         } catch (ModelNotFoundException $e) {
             return ['error' => true, 'message' => 'Projeto inválido.'];
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function createFile(array $data)
+    {
+        $project = $this->repository->skipPresenter()->find($data['project_id']);
+        $projectFile = $project->files()->create($data);
+
+        $result = $this->storage->put(
+            $projectFile->id.'.'.$data['extension'],
+            $this->filesystem->get($data['file'])
+        );
+
+        if(!$result) {
+            return ['error' => true, 'message' => 'There was an error uploading the file.'];
+        }
+
+        return ['error' => false, 'message' => 'File uploaded.'];
+    }
+
+    /**
+     * @param $projectFile
+     * @return array
+     */
+    public function destroyProjectFile($projectFile)
+    {
+        try {
+            if($projectFile->delete($projectFile->id));
+
+            $this->deleteFile($projectFile->id.'.'.$projectFile->extension);
+
+            return ['success', 'message' => 'Registro excluído'];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'Não foi possível encontrar o registro'
+            ];
+        } catch(FileNotFoundException $e) {
+            return ['success', 'message' => 'Registro excluído'];
+        }
+    }
+
+    /**
+     * @param $file
+     * @return bool
+     */
+    public function deleteFile($file)
+    {
+        if(!$this->storage->delete($file)) {
+            return false;
+        }
+
+        return true;
     }
 } 
