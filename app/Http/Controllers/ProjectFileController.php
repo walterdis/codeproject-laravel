@@ -38,6 +38,10 @@ class ProjectFileController extends Controller
         }
 
         $file = $request->file('file');
+        if(!$file) {
+            return ['error' => 'You must send a file'];
+        }
+
         $extension = $file->getClientOriginalExtension();
 
         $data = [
