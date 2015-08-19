@@ -17,7 +17,7 @@ Event::listen('illuminate.query', function($query)
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
 
 Route::get('oauth/access_token', function() {
