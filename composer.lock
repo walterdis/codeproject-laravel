@@ -626,12 +626,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/fractal.git",
-                "reference": "e5fcb83398913622b67f6271cf028871c2cbdd26"
+                "reference": "db5632a868955abcbd60cac583152e1e1a09e8d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/fractal/zipball/e5fcb83398913622b67f6271cf028871c2cbdd26",
-                "reference": "e5fcb83398913622b67f6271cf028871c2cbdd26",
+                "url": "https://api.github.com/repos/thephpleague/fractal/zipball/db5632a868955abcbd60cac583152e1e1a09e8d5",
+                "reference": "db5632a868955abcbd60cac583152e1e1a09e8d5",
                 "shasum": ""
             },
             "require": {
@@ -681,7 +681,7 @@
                 "league",
                 "rest"
             ],
-            "time": "2015-07-27 14:20:10"
+            "time": "2015-08-23 03:07:08"
         },
         {
             "name": "league/oauth2-server",
@@ -1409,12 +1409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Debug.git",
-                "reference": "aea19edb4a3bffb0cc6b1980d770d97724e228be"
+                "reference": "22b295edff4114adf752a4b919f4355e744104f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Debug/zipball/aea19edb4a3bffb0cc6b1980d770d97724e228be",
-                "reference": "aea19edb4a3bffb0cc6b1980d770d97724e228be",
+                "url": "https://api.github.com/repos/symfony/Debug/zipball/22b295edff4114adf752a4b919f4355e744104f5",
+                "reference": "22b295edff4114adf752a4b919f4355e744104f5",
                 "shasum": ""
             },
             "require": {
@@ -1456,7 +1456,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-31 15:18:52"
+            "time": "2015-08-17 08:58:33"
         },
         {
             "name": "symfony/dom-crawler",
@@ -2099,12 +2099,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "5015592f93c764c48f440511f56a6c83ce744137"
+                "reference": "feeb4e80d4e652540f35dcd7abb8f63214801e54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/5015592f93c764c48f440511f56a6c83ce744137",
-                "reference": "5015592f93c764c48f440511f56a6c83ce744137",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/feeb4e80d4e652540f35dcd7abb8f63214801e54",
+                "reference": "feeb4e80d4e652540f35dcd7abb8f63214801e54",
                 "shasum": ""
             },
             "require": {
@@ -2143,7 +2143,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-08-06 15:02:52"
+            "time": "2015-08-22 20:34:36"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -3221,12 +3221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "6eef1477f3c4451b6024fadb1254009be4602908"
+                "reference": "212832b4f30acc4d4f6c5484ec127fc013e3e5ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/6eef1477f3c4451b6024fadb1254009be4602908",
-                "reference": "6eef1477f3c4451b6024fadb1254009be4602908",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/212832b4f30acc4d4f6c5484ec127fc013e3e5ce",
+                "reference": "212832b4f30acc4d4f6c5484ec127fc013e3e5ce",
                 "shasum": ""
             },
             "require": {
@@ -3262,7 +3262,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-29 07:12:56"
+            "time": "2015-08-22 07:42:07"
         }
     ],
     "aliases": [],

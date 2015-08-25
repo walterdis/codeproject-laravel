@@ -8,7 +8,7 @@ angular.module('app.controllers')
         $scope.error = {
             message: '',
             error: false
-        }
+        };
 
         $scope.login = function() {
             if($scope.form.$valid) {
