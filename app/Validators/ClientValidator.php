@@ -1,13 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Walter
- * Date: 25/07/2015
- * Time: 01:02
- */
+ * @Author Walter Discher Cechinel <mistrim@gmail.com>
+  */
 
 namespace CodeProject\Validators;
-
 
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\LaravelValidator;

@@ -37,6 +37,21 @@ app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigP
         }).when('/clients/:id/remove', {
             templateUrl: 'build/views/client/remove.html',
             controller: 'ClientRemoveController'
+        }).when('/project/:id/notes', {
+            templateUrl: 'build/views/note/list.html',
+            controller: 'NoteListController'
+        }).when('/project/:id/notes/new', {
+            templateUrl: 'build/views/note/new.html',
+            controller: 'NoteNewController'
+        }).when('/project/:id/notes/:idNote', {
+            templateUrl: 'build/views/note/show.html',
+            controller: 'NoteShowController'
+        }).when('/project/:id/notes/:idNote/edit', {
+            templateUrl: 'build/views/note/edit.html',
+            controller: 'NoteEditController'
+        }).when('/project/:id/notes/:idNote/remove', {
+            templateUrl: 'build/views/note/remove.html',
+            controller: 'NoteRemoveController'
         });
 
         OAuthProvider.configure({
