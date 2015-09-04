@@ -34,9 +34,13 @@ app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigP
         }).when('/clients/:id/edit', {
             templateUrl: 'build/views/client/edit.html',
             controller: 'ClientEditController'
+        }).when('/clients/:id', {
+            templateUrl: 'build/views/client/show.html',
+            controller: 'ClientShowController'
         }).when('/clients/:id/remove', {
             templateUrl: 'build/views/client/remove.html',
             controller: 'ClientRemoveController'
+
         }).when('/project/:id/notes', {
             templateUrl: 'build/views/note/list.html',
             controller: 'NoteListController'
