@@ -7,8 +7,10 @@
 	<title>Laravel</title>
 
     @if(Config::get('app.debug'))
-        <link href="{{asset('build/css/vendor/bootstrap.min.css')}}" rel="stylesheet" />
-        <link href="{{asset('build/css/vendor/bootstrap-theme.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/app.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/components.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/flaticon.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/font-awesome.css')}}" rel="stylesheet" />
     @else
         <link href="{{ elixir('css/all.css') }}" rel="stylesheet" />
     @endif
@@ -90,8 +92,16 @@
         <script src="{{ asset('build/js/controllers/note/noteRemove.js') }}"></script>
         <script src="{{ asset('build/js/controllers/note/noteShow.js') }}"></script>
 
+        <script src="{{ asset('build/js/controllers/project/projectList.js') }}"></script>
+        <script src="{{ asset('build/js/controllers/project/projectNew.js') }}"></script>
+        <script src="{{ asset('build/js/controllers/project/projectEdit.js') }}"></script>
+        <script src="{{ asset('build/js/controllers/project/projectRemove.js') }}"></script>
+        <script src="{{ asset('build/js/controllers/project/projectShow.js') }}"></script>
+
         <script src="{{ asset('build/js/services/client.js') }}"></script>
         <script src="{{ asset('build/js/services/note.js') }}"></script>
+        <script src="{{ asset('build/js/services/user.js') }}"></script>
+        <script src="{{ asset('build/js/services/project.js') }}"></script>
 
     @else
         <script src="{{ elixir('js/all.js') }}"></script>

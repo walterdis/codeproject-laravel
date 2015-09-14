@@ -69,7 +69,7 @@ class ProjectFileController extends Controller
             return ['error' => 'Access forbidden'];
         }
 
-        $project = $this->repository->skipPresenter()->find($projectId);
+        $project = $this->repository->find($projectId);
         $projectFile = $project->files()->find($fileId);
 
         if(!$projectFile) {

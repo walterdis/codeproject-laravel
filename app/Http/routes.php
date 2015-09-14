@@ -46,6 +46,10 @@ Route::group(['middleware' => 'oauth'], function() {
     Route::resource('project.tasks', 'ProjectTaskController', ['except' => ['create', 'edit']]);
     Route::resource('project.note', 'ProjectNoteController', ['except' => ['create', 'edit']]);
 
+
+    Route::get('user/authenticated', 'UserController@authenticated');
+
+
     #Route::group(['middleware' => 'check-project-member'], function() use ($allowMember) {
         #Route::resource('project', 'ProjectController', ['only' => $allowMember]);
     #});

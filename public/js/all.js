@@ -414,4 +414,894 @@ this.init=function(g,h){e=g,this.config=h,e.$render=function(){d.render()},b.ite
  */
 'use strict';angular.module('mgcrea.ngStrap.navbar',[]).provider('$navbar',function(){var t=this.defaults={activeClass:'active',routeAttr:'data-match-route',strict:!1};this.$get=function(){return{defaults:t}}}).directive('bsNavbar',['$window','$location','$navbar',function(t,a,r){var e=r.defaults;return{restrict:'A',link:function(t,r,n,i){var c=angular.copy(e);angular.forEach(Object.keys(e),function(t){angular.isDefined(n[t])&&(c[t]=n[t])}),t.$watch(function(){return a.path()},function(t,a){var e=r[0].querySelectorAll('li['+c.routeAttr+']');angular.forEach(e,function(a){var r=angular.element(a),e=r.attr(c.routeAttr).replace('/','\\/');c.strict&&(e='^'+e+'$');var n=new RegExp(e,'i');n.test(t)?r.addClass(c.activeClass):r.removeClass(c.activeClass)})})}}}]);
 //# sourceMappingURL=../modules/navbar.min.js.map
+/**
+ * @license AngularJS v1.4.4
+ * (c) 2010-2015 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+/**
+ * @ngdoc module
+ * @name ngCookies
+ * @description
+ *
+ * # ngCookies
+ *
+ * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
+ *
+ *
+ * <div doc-module-components="ngCookies"></div>
+ *
+ * See {@link ngCookies.$cookies `$cookies`} for usage.
+ */
+
+
+angular.module('ngCookies', ['ng']).
+  /**
+   * @ngdoc provider
+   * @name $cookiesProvider
+   * @description
+   * Use `$cookiesProvider` to change the default behavior of the {@link ngCookies.$cookies $cookies} service.
+   * */
+   provider('$cookies', [function $CookiesProvider() {
+    /**
+     * @ngdoc property
+     * @name $cookiesProvider#defaults
+     * @description
+     *
+     * Object containing default options to pass when setting cookies.
+     *
+     * The object may have following properties:
+     *
+     * - **path** - `{string}` - The cookie will be available only for this path and its
+     *   sub-paths. By default, this would be the URL that appears in your base tag.
+     * - **domain** - `{string}` - The cookie will be available only for this domain and
+     *   its sub-domains. For obvious security reasons the user agent will not accept the
+     *   cookie if the current domain is not a sub domain or equals to the requested domain.
+     * - **expires** - `{string|Date}` - String of the form "Wdy, DD Mon YYYY HH:MM:SS GMT"
+     *   or a Date object indicating the exact date/time this cookie will expire.
+     * - **secure** - `{boolean}` - The cookie will be available only in secured connection.
+     *
+     * Note: by default the address that appears in your `<base>` tag will be used as path.
+     * This is important so that cookies will be visible for all routes in case html5mode is enabled
+     *
+     **/
+    var defaults = this.defaults = {};
+
+    function calcOptions(options) {
+      return options ? angular.extend({}, defaults, options) : defaults;
+    }
+
+    /**
+     * @ngdoc service
+     * @name $cookies
+     *
+     * @description
+     * Provides read/write access to browser's cookies.
+     *
+     * <div class="alert alert-info">
+     * Up until Angular 1.3, `$cookies` exposed properties that represented the
+     * current browser cookie values. In version 1.4, this behavior has changed, and
+     * `$cookies` now provides a standard api of getters, setters etc.
+     * </div>
+     *
+     * Requires the {@link ngCookies `ngCookies`} module to be installed.
+     *
+     * @example
+     *
+     * ```js
+     * angular.module('cookiesExample', ['ngCookies'])
+     *   .controller('ExampleController', ['$cookies', function($cookies) {
+     *     // Retrieving a cookie
+     *     var favoriteCookie = $cookies.get('myFavorite');
+     *     // Setting a cookie
+     *     $cookies.put('myFavorite', 'oatmeal');
+     *   }]);
+     * ```
+     */
+    this.$get = ['$$cookieReader', '$$cookieWriter', function($$cookieReader, $$cookieWriter) {
+      return {
+        /**
+         * @ngdoc method
+         * @name $cookies#get
+         *
+         * @description
+         * Returns the value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {string} Raw cookie value.
+         */
+        get: function(key) {
+          return $$cookieReader()[key];
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#getObject
+         *
+         * @description
+         * Returns the deserialized value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {Object} Deserialized cookie value.
+         */
+        getObject: function(key) {
+          var value = this.get(key);
+          return value ? angular.fromJson(value) : value;
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#getAll
+         *
+         * @description
+         * Returns a key value object with all the cookies
+         *
+         * @returns {Object} All cookies
+         */
+        getAll: function() {
+          return $$cookieReader();
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#put
+         *
+         * @description
+         * Sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {string} value Raw value to be stored.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        put: function(key, value, options) {
+          $$cookieWriter(key, value, calcOptions(options));
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#putObject
+         *
+         * @description
+         * Serializes and sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {Object} value Value to be stored.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        putObject: function(key, value, options) {
+          this.put(key, angular.toJson(value), options);
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookies#remove
+         *
+         * @description
+         * Remove given cookie
+         *
+         * @param {string} key Id of the key-value pair to delete.
+         * @param {Object=} options Options object.
+         *    See {@link ngCookies.$cookiesProvider#defaults $cookiesProvider.defaults}
+         */
+        remove: function(key, options) {
+          $$cookieWriter(key, undefined, calcOptions(options));
+        }
+      };
+    }];
+  }]);
+
+angular.module('ngCookies').
+/**
+ * @ngdoc service
+ * @name $cookieStore
+ * @deprecated
+ * @requires $cookies
+ *
+ * @description
+ * Provides a key-value (string-object) storage, that is backed by session cookies.
+ * Objects put or retrieved from this storage are automatically serialized or
+ * deserialized by angular's toJson/fromJson.
+ *
+ * Requires the {@link ngCookies `ngCookies`} module to be installed.
+ *
+ * <div class="alert alert-danger">
+ * **Note:** The $cookieStore service is **deprecated**.
+ * Please use the {@link ngCookies.$cookies `$cookies`} service instead.
+ * </div>
+ *
+ * @example
+ *
+ * ```js
+ * angular.module('cookieStoreExample', ['ngCookies'])
+ *   .controller('ExampleController', ['$cookieStore', function($cookieStore) {
+ *     // Put cookie
+ *     $cookieStore.put('myFavorite','oatmeal');
+ *     // Get cookie
+ *     var favoriteCookie = $cookieStore.get('myFavorite');
+ *     // Removing a cookie
+ *     $cookieStore.remove('myFavorite');
+ *   }]);
+ * ```
+ */
+ factory('$cookieStore', ['$cookies', function($cookies) {
+
+    return {
+      /**
+       * @ngdoc method
+       * @name $cookieStore#get
+       *
+       * @description
+       * Returns the value of given cookie key
+       *
+       * @param {string} key Id to use for lookup.
+       * @returns {Object} Deserialized cookie value, undefined if the cookie does not exist.
+       */
+      get: function(key) {
+        return $cookies.getObject(key);
+      },
+
+      /**
+       * @ngdoc method
+       * @name $cookieStore#put
+       *
+       * @description
+       * Sets a value for given cookie key
+       *
+       * @param {string} key Id for the `value`.
+       * @param {Object} value Value to be stored.
+       */
+      put: function(key, value) {
+        $cookies.putObject(key, value);
+      },
+
+      /**
+       * @ngdoc method
+       * @name $cookieStore#remove
+       *
+       * @description
+       * Remove given cookie
+       *
+       * @param {string} key Id of the key-value pair to delete.
+       */
+      remove: function(key) {
+        $cookies.remove(key);
+      }
+    };
+
+  }]);
+
+/**
+ * @name $$cookieWriter
+ * @requires $document
+ *
+ * @description
+ * This is a private service for writing cookies
+ *
+ * @param {string} name Cookie name
+ * @param {string=} value Cookie value (if undefined, cookie will be deleted)
+ * @param {Object=} options Object with options that need to be stored for the cookie.
+ */
+function $$CookieWriter($document, $log, $browser) {
+  var cookiePath = $browser.baseHref();
+  var rawDocument = $document[0];
+
+  function buildCookieString(name, value, options) {
+    var path, expires;
+    options = options || {};
+    expires = options.expires;
+    path = angular.isDefined(options.path) ? options.path : cookiePath;
+    if (value === undefined) {
+      expires = 'Thu, 01 Jan 1970 00:00:00 GMT';
+      value = '';
+    }
+    if (angular.isString(expires)) {
+      expires = new Date(expires);
+    }
+
+    var str = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+    str += path ? ';path=' + path : '';
+    str += options.domain ? ';domain=' + options.domain : '';
+    str += expires ? ';expires=' + expires.toUTCString() : '';
+    str += options.secure ? ';secure' : '';
+
+    // per http://www.ietf.org/rfc/rfc2109.txt browser must allow at minimum:
+    // - 300 cookies
+    // - 20 cookies per unique domain
+    // - 4096 bytes per cookie
+    var cookieLength = str.length + 1;
+    if (cookieLength > 4096) {
+      $log.warn("Cookie '" + name +
+        "' possibly not set or overflowed because it was too large (" +
+        cookieLength + " > 4096 bytes)!");
+    }
+
+    return str;
+  }
+
+  return function(name, value, options) {
+    rawDocument.cookie = buildCookieString(name, value, options);
+  };
+}
+
+$$CookieWriter.$inject = ['$document', '$log', '$browser'];
+
+angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterProvider() {
+  this.$get = $$CookieWriter;
+});
+
+
+})(window, window.angular);
+
+/*!
+	query-string
+	Parse and stringify URL query strings
+	https://github.com/sindresorhus/query-string
+	by Sindre Sorhus
+	MIT License
+*/
+(function () {
+	'use strict';
+	var queryString = {};
+
+	queryString.parse = function (str) {
+		if (typeof str !== 'string') {
+			return {};
+		}
+
+		str = str.trim().replace(/^(\?|#)/, '');
+
+		if (!str) {
+			return {};
+		}
+
+		return str.trim().split('&').reduce(function (ret, param) {
+			var parts = param.replace(/\+/g, ' ').split('=');
+			var key = parts[0];
+			var val = parts[1];
+
+			key = decodeURIComponent(key);
+			// missing `=` should be `null`:
+			// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+			val = val === undefined ? null : decodeURIComponent(val);
+
+			if (!ret.hasOwnProperty(key)) {
+				ret[key] = val;
+			} else if (Array.isArray(ret[key])) {
+				ret[key].push(val);
+			} else {
+				ret[key] = [ret[key], val];
+			}
+
+			return ret;
+		}, {});
+	};
+
+	queryString.stringify = function (obj) {
+		return obj ? Object.keys(obj).map(function (key) {
+			var val = obj[key];
+
+			if (Array.isArray(val)) {
+				return val.map(function (val2) {
+					return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
+				}).join('&');
+			}
+
+			return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+		}).join('&') : '';
+	};
+
+	if (typeof define === 'function' && define.amd) {
+		define(function() { return queryString; });
+	} else if (typeof module !== 'undefined' && module.exports) {
+		module.exports = queryString;
+	} else {
+		self.queryString = queryString;
+	}
+})();
+
+/**
+ * angular-oauth2 - Angular OAuth2
+ * @version v3.0.1
+ * @link https://github.com/seegno/angular-oauth2
+ * @license MIT
+ */
+(function(root, factory) {
+    if (typeof define === "function" && define.amd) {
+        define([ "angular", "query-string" ], factory);
+    } else if (typeof exports === "object") {
+        module.exports = factory(require("angular"), require("query-string"));
+    } else {
+        root.angularOAuth2 = factory(root.angular, root.queryString);
+    }
+})(this, function(angular, queryString) {
+    var ngModule = angular.module("angular-oauth2", [ "ngCookies" ]).config(oauthConfig).factory("oauthInterceptor", oauthInterceptor).provider("OAuth", OAuthProvider).provider("OAuthToken", OAuthTokenProvider);
+    function oauthConfig($httpProvider) {
+        $httpProvider.interceptors.push("oauthInterceptor");
+    }
+    oauthConfig.$inject = [ "$httpProvider" ];
+    var _prototypeProperties = function(child, staticProps, instanceProps) {
+        if (staticProps) Object.defineProperties(child, staticProps);
+        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+    };
+    var defaults = {
+        baseUrl: null,
+        clientId: null,
+        clientSecret: null,
+        grantPath: "/oauth2/token",
+        revokePath: "/oauth2/revoke"
+    };
+    var requiredKeys = [ "baseUrl", "clientId", "grantPath", "revokePath" ];
+    function OAuthProvider() {
+        var config;
+        this.configure = function(params) {
+            if (config) {
+                throw new Error("Already configured.");
+            }
+            if (!(params instanceof Object)) {
+                throw new TypeError("Invalid argument: `config` must be an `Object`.");
+            }
+            config = angular.extend({}, defaults, params);
+            angular.forEach(requiredKeys, function(key) {
+                if (!config[key]) {
+                    throw new Error("Missing parameter: " + key + ".");
+                }
+            });
+            if ("/" === config.baseUrl.substr(-1)) {
+                config.baseUrl = config.baseUrl.slice(0, -1);
+            }
+            if ("/" !== config.grantPath[0]) {
+                config.grantPath = "/" + config.grantPath;
+            }
+            if ("/" !== config.revokePath[0]) {
+                config.revokePath = "/" + config.revokePath;
+            }
+            return config;
+        };
+        this.$get = function($http, OAuthToken) {
+            var OAuth = function() {
+                function OAuth() {
+                    if (!config) {
+                        throw new Error("`OAuthProvider` must be configured first.");
+                    }
+                }
+                _prototypeProperties(OAuth, null, {
+                    isAuthenticated: {
+                        value: function isAuthenticated() {
+                            return !!OAuthToken.getToken();
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getAccessToken: {
+                        value: function getAccessToken(user, options) {
+                            if (!user || !user.username || !user.password) {
+                                throw new Error("`user` must be an object with `username` and `password` properties.");
+                            }
+                            var data = {
+                                client_id: config.clientId,
+                                grant_type: "password",
+                                username: user.username,
+                                password: user.password
+                            };
+                            if (null !== config.clientSecret) {
+                                data.client_secret = config.clientSecret;
+                            }
+                            data = queryString.stringify(data);
+                            options = angular.extend({
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                }
+                            }, options);
+                            return $http.post("" + config.baseUrl + "" + config.grantPath, data, options).then(function(response) {
+                                OAuthToken.setToken(response.data);
+                                return response;
+                            });
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getRefreshToken: {
+                        value: function getRefreshToken() {
+                            var data = {
+                                client_id: config.clientId,
+                                grant_type: "refresh_token",
+                                refresh_token: OAuthToken.getRefreshToken()
+                            };
+                            if (null !== config.clientSecret) {
+                                data.client_secret = config.clientSecret;
+                            }
+                            data = queryString.stringify(data);
+                            var options = {
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                }
+                            };
+                            return $http.post("" + config.baseUrl + "" + config.grantPath, data, options).then(function(response) {
+                                OAuthToken.setToken(response.data);
+                                return response;
+                            });
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    revokeToken: {
+                        value: function revokeToken() {
+                            var data = queryString.stringify({
+                                token: OAuthToken.getRefreshToken() ? OAuthToken.getRefreshToken() : OAuthToken.getAccessToken()
+                            });
+                            var options = {
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                }
+                            };
+                            return $http.post("" + config.baseUrl + "" + config.revokePath, data, options).then(function(response) {
+                                OAuthToken.removeToken();
+                                return response;
+                            });
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    }
+                });
+                return OAuth;
+            }();
+            return new OAuth();
+        };
+        this.$get.$inject = [ "$http", "OAuthToken" ];
+    }
+    var _prototypeProperties = function(child, staticProps, instanceProps) {
+        if (staticProps) Object.defineProperties(child, staticProps);
+        if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+    };
+    function OAuthTokenProvider() {
+        var config = {
+            name: "token",
+            options: {
+                secure: true
+            }
+        };
+        this.configure = function(params) {
+            if (!(params instanceof Object)) {
+                throw new TypeError("Invalid argument: `config` must be an `Object`.");
+            }
+            angular.extend(config, params);
+            return config;
+        };
+        this.$get = function($cookies) {
+            var OAuthToken = function() {
+                function OAuthToken() {}
+                _prototypeProperties(OAuthToken, null, {
+                    setToken: {
+                        value: function setToken(data) {
+                            return $cookies.putObject(config.name, data, config.options);
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getToken: {
+                        value: function getToken() {
+                            return $cookies.getObject(config.name);
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getAccessToken: {
+                        value: function getAccessToken() {
+                            return this.getToken() ? this.getToken().access_token : undefined;
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getAuthorizationHeader: {
+                        value: function getAuthorizationHeader() {
+                            if (!(this.getTokenType() && this.getAccessToken())) {
+                                return;
+                            }
+                            return "" + (this.getTokenType().charAt(0).toUpperCase() + this.getTokenType().substr(1)) + " " + this.getAccessToken();
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getRefreshToken: {
+                        value: function getRefreshToken() {
+                            return this.getToken() ? this.getToken().refresh_token : undefined;
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    getTokenType: {
+                        value: function getTokenType() {
+                            return this.getToken() ? this.getToken().token_type : undefined;
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    },
+                    removeToken: {
+                        value: function removeToken() {
+                            return $cookies.remove(config.name, config.options);
+                        },
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    }
+                });
+                return OAuthToken;
+            }();
+            return new OAuthToken();
+        };
+        this.$get.$inject = [ "$cookies" ];
+    }
+    function oauthInterceptor($q, $rootScope, OAuthToken) {
+        return {
+            request: function(config) {
+                if (OAuthToken.getAuthorizationHeader()) {
+                    config.headers = config.headers || {};
+                    config.headers.Authorization = OAuthToken.getAuthorizationHeader();
+                }
+                return config;
+            },
+            responseError: function(rejection) {
+                if (400 === rejection.status && rejection.data && ("invalid_request" === rejection.data.error || "invalid_grant" === rejection.data.error)) {
+                    OAuthToken.removeToken();
+                    $rootScope.$emit("oauth:error", rejection);
+                }
+                if (401 === rejection.status && (rejection.data && "invalid_token" === rejection.data.error) || rejection.headers("www-authenticate") && 0 === rejection.headers("www-authenticate").indexOf("Bearer")) {
+                    $rootScope.$emit("oauth:error", rejection);
+                }
+                return $q.reject(rejection);
+            }
+        };
+    }
+    oauthInterceptor.$inject = [ "$q", "$rootScope", "OAuthToken" ];
+    return ngModule;
+});
+var app = angular.module('app', ['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services']);
+
+angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
+angular.module('app.services', ['ngResource']);
+
+app.provider('appConfig', function() {
+    var config = {
+        baseUrl: 'http://codeproject.dev.br'
+    };
+    return  {
+        config: config,
+        $get: function() {
+            return config;
+        }
+    }
+});
+
+app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider',
+    function($routeProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider) {
+    $routeProvider
+        .when('/login', {
+            templateUrl: 'build/views/login.html',
+            controller: 'LoginController'
+        })
+        .when('/home', {
+            templateUrl: 'build/views/home.html',
+            controller: 'HomeController'
+        }).when('/clients', {
+            templateUrl: 'build/views/client/list.html',
+            controller: 'ClientListController'
+        }).when('/clients/new', {
+            templateUrl: 'build/views/client/new.html',
+            controller: 'ClientNewController'
+        }).when('/clients/:id/edit', {
+            templateUrl: 'build/views/client/edit.html',
+            controller: 'ClientEditController'
+        }).when('/clients/:id', {
+            templateUrl: 'build/views/client/show.html',
+            controller: 'ClientShowController'
+        }).when('/clients/:id/remove', {
+            templateUrl: 'build/views/client/remove.html',
+            controller: 'ClientRemoveController'
+
+        }).when('/project/:id/notes', {
+            templateUrl: 'build/views/note/list.html',
+            controller: 'NoteListController'
+        }).when('/project/:id/notes/new', {
+            templateUrl: 'build/views/note/new.html',
+            controller: 'NoteNewController'
+        }).when('/project/:id/notes/:idNote', {
+            templateUrl: 'build/views/note/show.html',
+            controller: 'NoteShowController'
+        }).when('/project/:id/notes/:idNote/edit', {
+            templateUrl: 'build/views/note/edit.html',
+            controller: 'NoteEditController'
+        }).when('/project/:id/notes/:idNote/remove', {
+            templateUrl: 'build/views/note/remove.html',
+            controller: 'NoteRemoveController'
+        });
+
+        OAuthProvider.configure({
+            baseUrl: appConfigProvider.config.baseUrl,
+            clientId: 'appid1',
+            clientSecret: 'secret', // optional
+            grantPath: 'oauth/access_token'
+        });
+
+        OAuthTokenProvider.configure({
+            name: 'token',
+            options: {
+                secure: false
+            }
+        });
+}]);
+
+app.run(['$rootScope', '$window', 'OAuth', function($rootScope, $window, OAuth) {
+    $rootScope.$on('oauth:error', function(event, rejection) {
+        // Ignore `invalid_grant` error - should be catched on `LoginController`.
+        if ('invalid_grant' === rejection.data.error) {
+            return;
+        }
+
+        // Refresh token when a `invalid_token` error occurs.
+        if ('invalid_token' === rejection.data.error) {
+            return OAuth.getRefreshToken();
+        }
+
+        // Redirect to `/login` with the `error_reason`.
+        return $window.location.href = '/#/login?error_reason=' + rejection.data.error;
+    });
+}]);
+angular.module('app.controllers')
+.controller('HomeController', ['$scope', function($scope) {
+
+}]);
+angular.module('app.controllers')
+    .controller('LoginController', ['$scope', '$location', 'OAuth', function($scope, $location, OAuth) {
+        $scope.user = {
+            username: '',
+            password: ''
+        };
+
+        $scope.error = {
+            message: '',
+            error: false
+        };
+
+        $scope.login = function() {
+            if($scope.form.$valid) {
+                OAuth.getAccessToken($scope.user).then(function() {
+                    $location.path('home');
+                }, function(data) {
+                    $scope.error.error = true;
+                    $scope.error.message = data.data.error_description;
+                });
+            }
+        };
+    }]);
+angular.module('app.services').service('Client', ['$resource', 'appConfig', function($resource, appConfig) {
+    return $resource(appConfig.baseUrl + '/client/:id', {id: '@id'}, {
+        update: {
+            method: 'PUT'
+        }
+    });
+}]);
+angular.module('app.services').service('Note', ['$resource', 'appConfig', function($resource, appConfig) {
+    return $resource(appConfig.baseUrl + '/project/:id/note/:idNote', {id: '@id', idNote: '@idNote'}, {
+        update: {
+            method: 'PUT'
+        }
+    });
+}]);
+angular.module('app.controllers')
+    .controller('ClientEditController', ['$scope', '$location', '$routeParams', 'Client',
+    function($scope, $location, $routeParams, Client) {
+        // Primeiro id = Id do resource em client.js (client/:id)
+        // Segundo id = Id da rota em app.js (:id/edit)
+        $scope.client = Client.get({id: $routeParams.id});
+
+        $scope.save = function() {
+            if($scope.form.$valid) {
+                Client.update({id: $scope.client.id}, $scope.client, function() {
+                    $location.path('/clients');
+                });
+            }
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('ClientListController', ['$scope', 'Client', function($scope, Client) {
+        $scope.clients = Client.query();
+    }]);
+angular.module('app.controllers')
+    .controller('ClientNewController', ['$scope', '$location', 'Client', function($scope, $location, Client) {
+        $scope.client = new Client();
+
+        $scope.save = function() {
+            if($scope.form.$valid) {
+                $scope.client.$save().then(function() {
+                    $location.path('/clients');
+                });
+            }
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('ClientRemoveController', ['$scope', '$location', '$routeParams', 'Client',
+    function($scope, $location, $routeParams, Client) {
+        // Primeiro id = Id do resource em client.js (client/:id)
+        // Segundo id = Id da rota em app.js (:id/edit)
+        $scope.client = Client.get({id: $routeParams.id});
+
+        $scope.remove = function() {
+            $scope.client.$delete().then(function() {
+                $location.path('/clients');
+            });
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('ClientShowController', ['$scope', 'Client', '$routeParams', function($scope, Client, $routeParams) {
+        $scope.client = Client.get({id: $routeParams.id});
+    }]);
+angular.module('app.controllers')
+    .controller('NoteEditController', ['$scope', '$location', '$routeParams', 'Note',
+    function($scope, $location, $routeParams, Note) {
+
+        // Primeiro id = Id do resource em note.js (note/:id)
+        // Segundo id = Id da rota em app.js (:id/edit)
+        $scope.note = Note.get({id: $routeParams.id, idNote: $routeParams.idNote});
+
+        $scope.save = function() {
+            if($scope.form.$valid) {
+                Note.update({id: $routeParams.id, idNote: $scope.note.id}, $scope.note, function() {
+                    $location.path('/project/'+$routeParams.id+'/notes');
+                });
+            }
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('NoteListController', ['$scope', 'Note', '$routeParams', function($scope, Note, $routeParams) {
+        $scope.notes = Note.query({id: $routeParams.id});
+        $scope.project_id = $routeParams.id;
+
+        //Note.query({id: $routeParams.id}, function(e){console.log('s', e.data);})
+    }]);
+angular.module('app.controllers')
+    .controller('NoteNewController', ['$scope', '$location', '$routeParams', 'Note', function($scope, $location, $routeParams, Note) {
+        $scope.note = new Note({id: $routeParams.id});
+
+        $scope.save = function() {
+            if($scope.form.$valid) {
+                $scope.note.$save().then(function() {
+                    $location.path('/project/'+$routeParams.id+'/notes');
+                });
+            }
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('NoteRemoveController', ['$scope', '$location', '$routeParams', 'Note',
+    function($scope, $location, $routeParams, Note) {
+        // Primeiro id = Id do resource em note.js (note/:id)
+        // Segundo id = Id da rota em app.js (:id/edit)
+        $scope.note = Note.get({id: $routeParams.id, idNote: $routeParams.idNote});
+
+        $scope.remove = function() {
+            $scope.note.$delete({id: $routeParams.id, idNote: $routeParams.idNote}).then(function() {
+                $location.path('/project/'+$routeParams.id+'/notes');
+            });
+        }
+    }]);
+angular.module('app.controllers')
+    .controller('NoteShowController', ['$scope', '$location', '$routeParams', 'Note',
+    function($scope, $location, $routeParams, Note) {
+        // Primeiro id = Id do resource em note.js (note/:id)
+        // Segundo id = Id da rota em app.js (:id/edit)
+        $scope.note = Note.get({id: $routeParams.id, idNote: $routeParams.idNote});
+    }]);
 //# sourceMappingURL=all.js.map

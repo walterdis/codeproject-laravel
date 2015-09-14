@@ -15,8 +15,22 @@ app.provider('appConfig', function() {
     }
 });
 
-app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider',
-    function($routeProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider) {
+app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider',
+    function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider) {
+    $httpProvider.defaults.transformResponse = function(data, headers) {
+        var headersGetter = headers();
+        if(headersGetter['content-type'] == 'application/json' ||
+        headersGetter['content-type'] == 'text/json') {
+            var dataJson = JSON.parse(data);
+            if(dataJson.hasOwnProperty('data')) {
+                dataJson = dataJson.data;
+            }
+
+            return dataJson;
+        }
+        return data;
+    };
+
     $routeProvider
         .when('/login', {
             templateUrl: 'build/views/login.html',
@@ -41,6 +55,22 @@ app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigP
             templateUrl: 'build/views/client/remove.html',
             controller: 'ClientRemoveController'
 
+        }).when('/projects', {
+            templateUrl: 'build/views/project/list.html',
+            controller: 'ProjectListController'
+        }).when('/projects/new', {
+            templateUrl: 'build/views/project/new.html',
+            controller: 'ProjectNewController'
+        }).when('/projects/:id/edit', {
+            templateUrl: 'build/views/project/edit.html',
+            controller: 'ProjectEditController'
+        }).when('/projects/:id', {
+            templateUrl: 'build/views/project/show.html',
+            controller: 'ProjectShowController'
+        }).when('/projects/:id/remove', {
+            templateUrl: 'build/views/project/remove.html',
+            controller: 'ProjectRemoveController'
+            
         }).when('/project/:id/notes', {
             templateUrl: 'build/views/note/list.html',
             controller: 'NoteListController'

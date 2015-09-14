@@ -16,11 +16,11 @@
                     <tbody>
                     <tr ng-repeat="o in notes">
                         <td>{{o.title}}</td>
-                        <td>{{o.note}}</td>
+                        <td>{{o.note | limitTo: 50}}...</td>
 
                         <td>
-                            <a ng-href="#/project/{{project_id}}/notes/{{o.id}}/edit">Editar
-                            <a ng-href="#/project/{{project_id}}/notes/{{o.id}}/remove">Excluir
+                            <a ng-href="#/project/{{project_id}}/notes/{{o.note_id}}/edit">Editar
+                            <a ng-href="#/project/{{project_id}}/notes/{{o.note_id}}/remove">Excluir
                         </td>
                     </tr>
                     </tbody>

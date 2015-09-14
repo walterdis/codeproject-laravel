@@ -2,6 +2,10 @@ angular.module('app.services').service('Client', ['$resource', 'appConfig', func
     return $resource(appConfig.baseUrl + '/client/:id', {id: '@id'}, {
         update: {
             method: 'PUT'
+        },
+        query: {
+            method: 'GET',
+            isArray: true,
         }
     });
 }]);
