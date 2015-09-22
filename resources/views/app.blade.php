@@ -98,6 +98,8 @@
         <script src="{{ asset('build/js/controllers/project/projectRemove.js') }}"></script>
         <script src="{{ asset('build/js/controllers/project/projectShow.js') }}"></script>
 
+        <script src="{{ asset('build/js/filters/date-br.js') }}"></script>
+
         <script src="{{ asset('build/js/services/client.js') }}"></script>
         <script src="{{ asset('build/js/services/note.js') }}"></script>
         <script src="{{ asset('build/js/services/user.js') }}"></script>

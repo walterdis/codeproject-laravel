@@ -10,6 +10,7 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
+                            <th>Client</th>
                             <th>Descripção</th>
                             <th>Progresso</th>
                             <th>Status</th>
@@ -20,10 +21,11 @@
                     <tbody>
                     <tr ng-repeat="o in projects">
                         <td>{{o.name}}</td>
+                        <td>{{o.client.data.name}}</td>
                         <td>{{o.description}}</td>
                         <td>{{o.progress}}</td>
                         <td>{{o.status}}</td>
-                        <td>{{o.due_date}}</td>
+                        <td>{{o.due_date | dateBr }}</td>
                         <td>
                             <a ng-href="#/projects/{{o.project_id}}/edit">Editar
                             <a ng-href="#/projects/{{o.project_id}}/remove">Excluir
