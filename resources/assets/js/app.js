@@ -18,7 +18,9 @@ app.provider('appConfig', function() {
 
 app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider',
     function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider) {
-    $httpProvider.defaults.transformResponse = function(data, headers) {
+        $httpProvider.defaults.headers.post['Content-Type'] = 'Application/x-www-form-urlencoded;charset=utf-8';
+
+        $httpProvider.defaults.transformResponse = function(data, headers) {
         var headersGetter = headers();
         if(headersGetter['content-type'] == 'application/json' ||
         headersGetter['content-type'] == 'text/json') {

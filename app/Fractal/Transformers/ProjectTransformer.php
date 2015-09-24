@@ -14,7 +14,7 @@ use League\Fractal\TransformerAbstract;
 class ProjectTransformer extends TransformerAbstract
 {
 
-    protected $defaultIncludes = ['members', 'client'];
+    protected $defaultIncludes = ['members'];
 
     /**
      * @param Project $project
@@ -29,7 +29,7 @@ class ProjectTransformer extends TransformerAbstract
             'description' => $project->description,
             'progress' => $project->progress,
             'status' => $project->status,
-            'due_date' => $project->due_date
+            'due_date' => $project->due_date->getTimestamp() * 1000
         );
     }
 
@@ -48,7 +48,7 @@ class ProjectTransformer extends TransformerAbstract
      */
     public function includeClient(Project $project)
     {
-        return $this->collection($project->client, new ClientTransformer());
+        return $this->item($project->client, new ClientTransformer());
     }
 
 } 
