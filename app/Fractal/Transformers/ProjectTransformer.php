@@ -29,7 +29,7 @@ class ProjectTransformer extends TransformerAbstract
             'description' => $project->description,
             'progress' => $project->progress,
             'status' => $project->status,
-            'due_date' => '2015-01-01' //$project->due_date->getTimestamp() * 1000
+            'due_date' => $project->due_date->getTimestamp() * 1000
         );
     }
 

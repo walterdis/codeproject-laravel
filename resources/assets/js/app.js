@@ -5,7 +5,7 @@ angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
 angular.module('app.filters', []);
 angular.module('app.services', ['ngResource']);
 
-app.provider('appConfig', ['$httpParamSerializerProvider' ,function($httpParamSerializerProvider) {
+app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSerializerProvider) {
     var config = {
         baseUrl: 'http://codeproject.dev.br',
 

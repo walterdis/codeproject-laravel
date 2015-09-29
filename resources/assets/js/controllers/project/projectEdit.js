@@ -4,6 +4,7 @@ angular.module('app.controllers')
         // Primeiro id = Id do resource em project.js (project/:id)
         // Segundo id = Id da rota em app.js (:id/edit)
         $scope.project = Project.get({id: $routeParams.id}, function(data) {
+            console.log(data);
             $scope.project = data;
             Client.get({id: data.client}, function(data) {
                 $scope.clientSelected = data;
