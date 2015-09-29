@@ -15,6 +15,9 @@ use Prettus\Repository\Eloquent\BaseRepository;
 
 class ClientRepositoryEloquent extends BaseRepository implements ClientRepository
 {
+    protected $fieldSearchable = [
+        'name', 'email'
+    ];
 
     public function model()
     {
@@ -29,4 +32,9 @@ class ClientRepositoryEloquent extends BaseRepository implements ClientRepositor
     {
         return ClientPresenter::class;
     }
+
+    public function boot() {
+        $this->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+    }
+
 } 

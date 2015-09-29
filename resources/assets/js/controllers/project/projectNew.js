@@ -11,5 +11,24 @@ angular.module('app.controllers')
                     $location.path('/projects');
                 });
             }
-        }
+        };
+
+        $scope.formatName = function(id) {
+            if(id) {
+                for(var i in $scope.clients) {
+                    if($scope.clients[i].client_id == id) {
+                        return $scope.clients[i].name;
+                    }
+                }
+            }
+            return '';
+        };
+
+        $scope.getClients = function(name) {
+            return Client.query({
+                search: name,
+                searchFields: 'name:like'
+            }).$promise;
+        };
+
     }]);

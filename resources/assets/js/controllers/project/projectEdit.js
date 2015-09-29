@@ -1,14 +1,14 @@
 angular.module('app.controllers')
-    .controller('ProjectEditController', ['$scope', '$location', '$routeParams', 'Project', 'Client',
-    function($scope, $location, $routeParams, Project, Client) {
+    .controller('ProjectEditController', ['$scope', '$location', '$cookies', '$routeParams', 'Project', 'Client',
+    function($scope, $location, $cookies, $routeParams, Project, Client) {
         // Primeiro id = Id do resource em project.js (project/:id)
         // Segundo id = Id da rota em app.js (:id/edit)
         $scope.project = Project.get({id: $routeParams.id}, function(data) {
             $scope.project = data;
-            $scope.project.client_id = $scope.project.client;
+            Client.get({id: data.client}, function(data) {
+                $scope.clientSelected = data;
+            });
         });
-
-        $scope.clients = Client.query();
 
         $scope.progress = [
             {value: 10},
@@ -23,11 +23,31 @@ angular.module('app.controllers')
             {value: 100}
         ];
 
+        $scope.formatName = function(model) {
+            if(model) {
+                return model.name;
+            }
+            return '';
+        };
+
+        $scope.getClients = function(name) {
+            return Client.query({
+                search: name,
+                searchFields: 'name:like'
+            }).$promise;
+        };
+
+        $scope.selectClient = function(item) {
+            $scope.project.client_id = item.client_id;
+        };
+
         $scope.save = function() {
             if($scope.form.$valid) {
+                $scope.project.owner_id = $cookies.getObject('user').id;
                 Project.update({id: $routeParams.id}, $scope.project, function() {
                     $location.path('/projects');
                 });
             }
-        }
+        };
+
     }]);

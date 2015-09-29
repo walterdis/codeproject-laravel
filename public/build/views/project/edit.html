@@ -11,9 +11,11 @@
                     <div class="form-group" ng-class="{'has-error': !form.client_id.$valid && form.progress.$touched}">
                         <label class="col-md-4 control-label">Cliente</label>
                         <div class="col-md-6">
-                            <select name="client_id" ng-model="project.client_id" ng-options="client.client_id as client.name for client in clients">
-
-                            </select>
+                            <input type="text" name="client" ng-model="clientSelected"
+                                   typeahead="o as o.name for o in getClients($viewValue)|limitTo:10"
+                                   typeahead-input-formatter="formatName($model)"
+                                   typeahead-on-select="selectClient($item)"
+                            />
                         </div>
                     </div>
 
@@ -40,7 +42,7 @@
                     <div class="form-group" ng-class="{'has-error': !form.due_date.$valid && form.due_date.$touched}">
                         <label class="col-md-4 control-label">Data limite</label>
                         <div class="col-md-6">
-                            <input type="date" class="form-control" name="due_date" ng-model="project.due_date" required="required" />
+                            <input type="text" class="form-control" name="due_date" ng-model="project.due_date" required="required" />
                             <div ng-messages="form.due_date.$error" class="help-block" ng-show="form.due_date.$touched">
                                 <div ng-message="required">Campo obrigatório</div>
                             </div>
