@@ -3,13 +3,20 @@ angular.module('app.controllers')
     function($scope, $location, $cookies, $routeParams, Project, Client) {
         // Primeiro id = Id do resource em project.js (project/:id)
         // Segundo id = Id da rota em app.js (:id/edit)
-        $scope.project = Project.get({id: $routeParams.id}, function(data) {
-            console.log(data);
+        Project.get({id: $routeParams.id}, function(data) {
             $scope.project = data;
-            Client.get({id: data.client}, function(data) {
-                $scope.clientSelected = data;
-            });
+            $scope.clientSelected = data.client.data;
         });
+
+        $scope.due_date = {
+            status: {
+                opened: false
+            }
+        };
+
+        $scope.open = function($event) {
+            $scope.due_date.status.opened = true
+        };
 
         $scope.progress = [
             {value: 10},

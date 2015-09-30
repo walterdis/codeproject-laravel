@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services', 'app.filters',
-'ui.bootstrap.typeahead', 'ui.bootstrap.tpls']);
+'ui.bootstrap.typeahead', 'ui.bootstrap.tpls', 'ui.bootstrap.datepicker']);
 
 angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
 angular.module('app.filters', []);
@@ -32,6 +32,7 @@ app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSe
             }
         }
     };
+
     return  {
         config: config,
         $get: function() {
@@ -42,8 +43,8 @@ app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSe
 
 app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider',
     function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider) {
-        $httpProvider.defaults.headers.post['Content-Type'] = 'Application/x-www-form-urlencoded;charset=utf-8';
-        $httpProvider.defaults.headers.put['Content-Type'] = 'Application/x-www-form-urlencoded;charset=utf-8';
+        $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+        $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
         $httpProvider.defaults.transformRequest = appConfigProvider.config.utils.transformRequest;
         $httpProvider.defaults.transformResponse = appConfigProvider.config.utils.transformResponse;

@@ -21,10 +21,9 @@ angular.module('app.services')
                     transformResponse: function(data, headers) {
                         var o = appConfig.utils.transformResponse(data, headers);
                         if(angular.isObject(o) && o.hasOwnProperty('due_date')) {
-                            //new Date(o.due_date);
-                            //var arrayDate = o.due_date.split('-'),
-                             //   month = parseInt(arrayDate[1]) -1;
-                            o.due_date = new Date(o.due_date);
+                            var arrayDate = o.due_date.split('-'),
+                             month = parseInt(arrayDate[1]) -1;
+                            o.due_date = new Date(arrayDate[0], month, arrayDate[2]);
                         }
                         return o;
                     }

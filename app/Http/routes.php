@@ -10,6 +10,8 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 Event::listen('illuminate.query', function($query)
 {

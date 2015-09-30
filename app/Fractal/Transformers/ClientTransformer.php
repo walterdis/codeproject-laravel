@@ -14,7 +14,7 @@ use League\Fractal\TransformerAbstract;
 class ClientTransformer extends TransformerAbstract
 {
 
-    protected $defaultIncludes = ['projects'];
+    protected $defaultIncludes = [];
 
     /**
      * @param Client $client

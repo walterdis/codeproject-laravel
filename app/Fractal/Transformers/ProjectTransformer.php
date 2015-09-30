@@ -27,9 +27,9 @@ class ProjectTransformer extends TransformerAbstract
             'client' => $project->client_id,
             'name' => $project->name,
             'description' => $project->description,
-            'progress' => $project->progress,
+            'progress' => (int) $project->progress,
             'status' => $project->status,
-            'due_date' => $project->due_date->getTimestamp() * 1000
+            'due_date' => $project->due_date->format('Y-m-d')
         );
     }
 
